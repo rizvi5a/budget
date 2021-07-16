@@ -1,5 +1,6 @@
 let transactions = [];
 let myChart;
+console.log ("EXT: ");
 
 fetch("/api/transaction")
   .then(response => {
@@ -8,7 +9,7 @@ fetch("/api/transaction")
   .then(data => {
     // save db data on global variable
     transactions = data;
-
+console.log(data);
     populateTotal();
     populateTable();
     populateChart();
@@ -151,3 +152,4 @@ document.querySelector("#add-btn").onclick = function() {
 document.querySelector("#sub-btn").onclick = function() {
   sendTransaction(false);
 };
+console.log("done");
