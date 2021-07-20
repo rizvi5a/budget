@@ -1,18 +1,18 @@
 const FILES_TO_CACHE = [
   '/',
-  './index.html',
-  './index.js',
-  '../models/transaction,js',
-  
-  './styles.css',
-  
-//   'https://fonts.googleapis.com/css?family=Istok+Web|Montserrat:800&display=swap',
-//   'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
+  '/index.html',
+  '/assets/css/style.css',
+  'https://fonts.googleapis.com/css?family=Istok+Web|Montserrat:800&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
+  "/index.js",
+  "/indexedDb.js",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png"
 ];
 
 const PRECACHE = 'precache-v1';
 const RUNTIME = 'runtime';
-console.log("start service");
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
@@ -24,8 +24,6 @@ self.addEventListener('install', (event) => {
 
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', (event) => {
-  console.log ("activate");
-  
   const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
     caches
@@ -45,7 +43,6 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
- 
   if (event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
@@ -55,7 +52,7 @@ self.addEventListener('fetch', (event) => {
 
         return caches.open(RUNTIME).then((cache) => {
           return fetch(event.request).then((response) => {
-            return cache.match(event.request, response.clone()).then(() => {
+            return cache.put(event.request, response.clone()).then(() => {
               return response;
             });
           });
